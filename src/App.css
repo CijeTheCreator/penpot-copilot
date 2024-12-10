@@ -1,0 +1,27 @@
+.color-empty {
+  fill: #ddd;
+}
+.color-empty {
+  fill: #ebedf0; /* light gray for empty days */
+}
+
+.color-scale-1 {
+  fill: #c6e48b; /* light green */
+}
+
+.color-scale-2 {
+  fill: #7bc96f; /* medium green */
+}
+
+.color-scale-3 {
+  fill: #239a3b; /* dark green */
+}
+
+.color-scale-4 {
+  fill: #196127; /* darkest green */
+}
+
+.react-calendar-heatmap text {
+  font-size: 10px;
+  fill: #fff;
+}
