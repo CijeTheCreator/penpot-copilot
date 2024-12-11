@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { htmlToPenpot } from "./lib/html-to-penpot2";
-import { testHtml } from "./testInnerHtml";
+// import { testHtml } from "./testInnerHtml";
 
 function Plugin() {
   const url = new URL(window.location.href);

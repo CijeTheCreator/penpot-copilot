@@ -111,58 +111,65 @@ function createTree(root: PenpotNode, parent?: Board) {
   switch (root.type) {
     case "FRAME": {
       board = penpot.createBoard();
-      board.x = root.x!;
-      board.y = root.y!;
-      board.resize(root.width!, root.height!);
-      board.constraintsVertical = root.constraints!.vertical;
-      board.constraintsHorizontal = root.constraints!.horizontal;
+      if (root.x) board.x = root.x!;
+      if (root.y) board.y = root.y!;
+      if (root.width && root.height) board.resize(root.width!, root.height!);
+      if (root.constraints)
+        board.constraintsVertical = root.constraints!.vertical;
+      if (root.constraints)
+        board.constraintsHorizontal = root.constraints!.horizontal;
       if (parent) parent.appendChild(board);
       break;
     }
     case "RECTANGLE": {
       const rectangle = penpot.createRectangle();
-      rectangle.x = root.x!;
-      rectangle.y = root.y!;
-      rectangle.resize(root.width!, root.height!);
-      applyFill(root.fills, rectangle);
-      const strokes = root.strokes!.map((stroke) => {
-        const strokeColr = rgbToHex(
-          stroke.color.r,
-          stroke.color.g,
-          stroke.color.b,
-        );
-        const stroke_unit: PenpotStroke = {
-          strokeColor: strokeColr,
-          strokeOpacity: stroke.opacity,
-          strokeStyle: "solid",
-          strokeWidth: root.strokeWeight,
-        };
-        return stroke_unit;
-      });
+      if (root.x) rectangle.x = root.x!;
+      if (root.y) rectangle.y = root.y!;
+      if (root.width && root.height)
+        rectangle.resize(root.width!, root.height!);
+      if (root.fills) applyFill(root.fills, rectangle);
+      if (root.strokes) {
+        const strokes = root.strokes!.map((stroke) => {
+          const strokeColr = rgbToHex(
+            stroke.color.r,
+            stroke.color.g,
+            stroke.color.b,
+          );
+          const stroke_unit: PenpotStroke = {
+            strokeColor: strokeColr,
+            strokeOpacity: stroke.opacity,
+            strokeStyle: "solid",
+            strokeWidth: root.strokeWeight,
+          };
+          return stroke_unit;
+        });
 
-      rectangle.strokes = strokes;
-      const shadows = root.effects!.map((effect) => {
-        const effectColor = effect.color!;
-        const shadowColor = rgbToHex(
-          effectColor.r,
-          effectColor.g,
-          effectColor.b,
-        );
-        const penpotColor: PenpotColor = {
-          color: shadowColor,
-        };
-        const shadow: Shadow = {
-          style: "drop-shadow",
-          offsetX: effect.offset!.x,
-          offsetY: effect.offset!.y,
-          spread: effect.spread_radius!,
-          blur: effect.blur_radius!,
-          hidden: !effect.visible!,
-          color: penpotColor,
-        };
-        return shadow;
-      });
-      rectangle.shadows = shadows;
+        rectangle.strokes = strokes;
+      }
+      if (root.effects) {
+        const shadows = root.effects!.map((effect) => {
+          const effectColor = effect.color!;
+          const shadowColor = rgbToHex(
+            effectColor.r,
+            effectColor.g,
+            effectColor.b,
+          );
+          const penpotColor: PenpotColor = {
+            color: shadowColor,
+          };
+          const shadow: Shadow = {
+            style: "drop-shadow",
+            offsetX: effect.offset!.x,
+            offsetY: effect.offset!.y,
+            spread: effect.spread_radius!,
+            blur: effect.blur_radius!,
+            hidden: !effect.visible!,
+            color: penpotColor,
+          };
+          return shadow;
+        });
+        rectangle.shadows = shadows;
+      }
       applyConstraints(root, rectangle);
       parent?.appendChild(rectangle);
       break;
@@ -171,10 +178,10 @@ function createTree(root: PenpotNode, parent?: Board) {
     case "TEXT": {
       const text = penpot.createText(root.characters!);
       if (!text) break;
-      text.x = root.x!;
-      text.y = root.y!;
-      text.resize(root.width!, root.height!);
-      applyFill(root.fills!, text);
+      if (root.x) text.x = root.x!;
+      if (root.y) text.y = root.y!;
+      if (root.width && root.height) text.resize(root.width!, root.height!);
+      if (root.fills) applyFill(root.fills!, text);
       applyConstraints(root, text);
       if (root.letterSpacing) text.letterSpacing = `${root.letterSpacing}`;
       if (root.fontSize) text.fontSize = `${root.fontSize}`;
@@ -217,7 +224,6 @@ function createTree(root: PenpotNode, parent?: Board) {
             break;
         }
       }
-
       //TODO: fontId??
       // if (root.fontFamily) text.fontFamily = root.fontFamily;
       parent?.appendChild(text);
@@ -227,9 +233,9 @@ function createTree(root: PenpotNode, parent?: Board) {
     case "SVG": {
       const svg = penpot.createShapeFromSvg(root.svg!);
       if (!svg) break;
-      svg.x = root.x!;
-      svg.y = root.y!;
-      svg.resize(root.width!, root.height!);
+      if (root.x) svg.x = root.x!;
+      if (root.y) svg.y = root.y!;
+      if (root.width && root.height) svg.resize(root.width!, root.height!);
       applyConstraints(root, svg);
       parent?.appendChild(svg);
       break;
