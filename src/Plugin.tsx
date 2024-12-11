@@ -2,12 +2,13 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { htmlToPenpot } from "./lib/html-to-penpot2";
+import { testHtml } from "./testInnerHtml";
 
 function Plugin() {
   const url = new URL(window.location.href);
   const initialTheme = url.searchParams.get("theme");
   const [theme] = useState(initialTheme || null);
-  const [user, setUser] = useState<string | null>(null);
+  const [, setUser] = useState<string | null>(null);
 
   parent.postMessage(
     {
@@ -25,9 +26,7 @@ function Plugin() {
   });
 
   useEffect(() => {
-    const body = document.querySelector("body");
-    if (!body) return console.log("Pulling out, there is no body");
-    console.log(JSON.stringify(htmlToPenpot(body, true)));
+    // createPenpotTree(testHtml);
   }, []);
 
   return (
@@ -41,3 +40,21 @@ function Plugin() {
 }
 
 export default Plugin;
+
+function createPenpotTree(innerHTML: string) {
+  const { tempContainer, newElement } = createElementInDOM(innerHTML);
+  const penpotTree = htmlToPenpot(newElement);
+  console.log(JSON.stringify(penpotTree));
+  document.body.removeChild(tempContainer);
+}
+
+function createElementInDOM(innerHTML: string) {
+  const tempContainer = document.createElement("div");
+  tempContainer.style.position = "absolute";
+  tempContainer.style.visibility = "hidden";
+  document.body.appendChild(tempContainer);
+  const newElement = document.createElement("div");
+  newElement.innerHTML = innerHTML;
+  tempContainer.appendChild(newElement);
+  return { tempContainer, newElement };
+}
