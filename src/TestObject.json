@@ -1,0 +1,147 @@
+[
+  {
+    "type": "FRAME",
+    "width": 1034,
+    "height": 645,
+    "x": 0,
+    "y": 0,
+    "children": [
+      {
+        "type": "FRAME",
+        "clipsContent": false,
+        "x": 0,
+        "y": 0,
+        "width": 1035,
+        "height": 104,
+        "backgrounds": [],
+        "children": [
+          {
+            "type": "RECTANGLE",
+            "x": 0,
+            "y": 0,
+            "width": 1035,
+            "height": 104,
+            "fills": [],
+            "topLeftRadius": 0,
+            "topRightRadius": 0,
+            "bottomRightRadius": 0,
+            "bottomLeftRadius": 0,
+            "constraints": { "horizontal": "SCALE", "vertical": "MIN" }
+          },
+          {
+            "type": "FRAME",
+            "clipsContent": false,
+            "x": 0,
+            "y": 0,
+            "width": 1035,
+            "height": 104,
+            "backgrounds": [],
+            "children": [
+              {
+                "type": "RECTANGLE",
+                "x": 0,
+                "y": 0,
+                "width": 1035,
+                "height": 104,
+                "fills": [],
+                "topLeftRadius": 0,
+                "topRightRadius": 0,
+                "bottomRightRadius": 0,
+                "bottomLeftRadius": 0,
+                "constraints": { "horizontal": "SCALE", "vertical": "MIN" }
+              },
+              {
+                "type": "FRAME",
+                "clipsContent": false,
+                "x": 16,
+                "y": 32,
+                "width": 1003,
+                "height": 56,
+                "backgrounds": [],
+                "children": [
+                  {
+                    "type": "RECTANGLE",
+                    "x": 0,
+                    "y": 0,
+                    "width": 1003,
+                    "height": 56,
+                    "fills": [],
+                    "topLeftRadius": 0,
+                    "topRightRadius": 0,
+                    "bottomRightRadius": 0,
+                    "bottomLeftRadius": 0,
+                    "constraints": { "horizontal": "SCALE", "vertical": "MIN" }
+                  },
+                  {
+                    "type": "FRAME",
+                    "clipsContent": false,
+                    "x": 478,
+                    "y": 16,
+                    "width": 47,
+                    "height": 24,
+                    "backgrounds": [],
+                    "children": [
+                      {
+                        "type": "RECTANGLE",
+                        "x": 0,
+                        "y": 0,
+                        "width": 47,
+                        "height": 24,
+                        "fills": [],
+                        "topLeftRadius": 0,
+                        "topRightRadius": 0,
+                        "bottomRightRadius": 0,
+                        "bottomLeftRadius": 0,
+                        "constraints": {
+                          "horizontal": "SCALE",
+                          "vertical": "MIN"
+                        }
+                      },
+                      {
+                        "x": 0,
+                        "y": 0,
+                        "width": 47,
+                        "height": 24,
+                        "type": "TEXT",
+                        "characters": "Plugin",
+                        "fills": [
+                          {
+                            "type": "SOLID",
+                            "color": {
+                              "r": 0.9803921568627451,
+                              "g": 0.9803921568627451,
+                              "b": 0.9803921568627451
+                            },
+                            "opacity": 1
+                          }
+                        ],
+                        "lineHeight": { "unit": "PIXELS", "value": 24 },
+                        "fontSize": 16,
+                        "fontFamily": "Work Sans, sans-serif",
+                        "data": { "heightType": "fixed", "widthType": "fixed" },
+                        "constraints": {
+                          "horizontal": "CENTER",
+                          "vertical": "MIN"
+                        }
+                      }
+                    ],
+                    "data": { "heightType": "fixed", "widthType": "fixed" },
+                    "constraints": { "horizontal": "CENTER", "vertical": "MIN" }
+                  }
+                ],
+                "data": { "heightType": "fixed", "widthType": "fixed" },
+                "constraints": { "horizontal": "CENTER", "vertical": "MIN" }
+              }
+            ],
+            "data": { "heightType": "fixed", "widthType": "fixed" },
+            "constraints": { "horizontal": "SCALE", "vertical": "MIN" }
+          }
+        ],
+        "data": { "heightType": "fixed", "widthType": "fixed" },
+        "constraints": { "horizontal": "SCALE", "vertical": "MIN" }
+      }
+    ],
+    "data": { "heightType": "fixed", "widthType": "fixed" },
+    "constraints": { "horizontal": "SCALE", "vertical": "MIN" }
+  }
+]

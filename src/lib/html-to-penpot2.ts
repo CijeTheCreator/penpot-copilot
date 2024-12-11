@@ -5,16 +5,16 @@ type TYPE = "SVG" | "RECTANGLE" | "TEXT" | "FRAME";
 type STROKE_TYPE = "SOLID";
 type SHADOW_EFFECT_TYPE = "DROP_SHADOW";
 type BLEND_MODE = "NORMAL";
-type StrokeWeight = number;
-type Effect = WithRef<ShadowEffect>;
-type Stroke = {
+export type StrokeWeight = number;
+export type Effect = WithRef<ShadowEffect>;
+export type Stroke = {
   type: STROKE_TYPE;
   color: Color;
   opacity: number;
 };
-type Constraints = {
-  horizontal: "CENTER" | "MAX" | "MIN" | "center" | "SCALE";
-  vertical: "CENTER" | "MAX" | "MIN" | "min" | "SCALE";
+export type Constraints = {
+  horizontal: "center" | "right" | "left" | "center" | "scale";
+  vertical: "center" | "bottom" | "top" | "scale";
 };
 
 interface ParsedBoxShadow {
@@ -26,10 +26,11 @@ interface ParsedBoxShadow {
   color: string;
 }
 
-type ShadowEffect = {
+export type ShadowEffect = {
   color: Color;
   type: SHADOW_EFFECT_TYPE;
-  radius: number;
+  blur_radius: number;
+  spread_radius: number;
   blendMode: BLEND_MODE;
   visible: boolean;
   offset: {
@@ -85,7 +86,7 @@ type TextNode = {
   constraints: Constraints;
 };
 
-type Color = {
+export type Color = {
   r: number;
   g: number;
   b: number;
@@ -703,7 +704,8 @@ export const getShadowEffects = ({
       const shadowEffect: ShadowEffect = {
         color,
         type: "DROP_SHADOW",
-        radius: parsed.blurRadius,
+        blur_radius: parsed.blurRadius,
+        spread_radius: parsed.spreadRadius,
         blendMode: "NORMAL",
         visible: true,
         offset: {
@@ -1243,8 +1245,8 @@ export function addConstraints(layers: LayerNode[]) {
     traverse(layer, (child) => {
       if (child.type === "SVG") {
         child.constraints = {
-          horizontal: "CENTER",
-          vertical: "MIN",
+          horizontal: "center",
+          vertical: "top",
         };
       } else {
         const ref = child.ref;
@@ -1349,22 +1351,22 @@ export function addConstraints(layers: LayerNode[]) {
             child.constraints = {
               horizontal:
                 hasAutoMarginLeft && hasAutoMarginRight
-                  ? "CENTER"
+                  ? "center"
                   : hasAutoMarginLeft
-                    ? "MAX"
-                    : "SCALE",
+                    ? "right"
+                    : "scale",
               vertical:
                 hasAutoMarginBottom && hasAutoMarginTop
-                  ? "CENTER"
+                  ? "center"
                   : hasAutoMarginTop
-                    ? "MAX"
-                    : "MIN",
+                    ? "bottom"
+                    : "top",
             };
           }
         } else {
           child.constraints = {
-            horizontal: "SCALE",
-            vertical: "MIN",
+            horizontal: "scale",
+            vertical: "top",
           };
         }
       }

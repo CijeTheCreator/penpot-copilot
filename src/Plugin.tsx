@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
 import "./App.css";
+import { htmlToPenpot } from "./lib/html-to-penpot2";
 
 function Plugin() {
   const url = new URL(window.location.href);
@@ -22,6 +23,12 @@ function Plugin() {
       setUser(userId);
     }
   });
+
+  useEffect(() => {
+    const body = document.querySelector("body");
+    if (!body) return console.log("Pulling out, there is no body");
+    console.log(JSON.stringify(htmlToPenpot(body, true)));
+  }, []);
 
   return (
     <div
