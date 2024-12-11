@@ -1056,7 +1056,7 @@ const makeTree = ({
       }
       if (layer.type === "FRAME" && "children" in layer) {
         // Final all child elements with layers, and add groups around  any with a shared parent not shared by another
-        const ref = layer.ref as Element;
+        // const ref = layer.ref as Element;
         if (layer.children && layer.children.length > 2) {
           const childRefs =
             layer.children &&
@@ -1117,7 +1117,7 @@ const makeTree = ({
                 backgrounds: [] as any,
                 children: newChildren as any,
               };
-              refMap.set(lowestCommonDenominator, ref);
+              refMap.set(lowestCommonDenominator, newParent);
               let firstIndex = layer.children.length - 1;
               for (const child of newChildren) {
                 const childIndex = layer.children.indexOf(child as any);
