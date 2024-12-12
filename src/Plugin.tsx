@@ -74,6 +74,7 @@ function Plugin() {
 
   const [reply, setReply] = useState<string | null>(null);
   const [replyLoading, setReplyLoading] = useState<boolean>(false);
+  const [blank, setBlank] = useState<boolean>(true);
   const [replyLoadingText, setReplyLoadingText] = useState<string | null>(null);
   const [replyError, setReplyError] = useState<string | null>(null);
 
@@ -82,6 +83,7 @@ function Plugin() {
     setReplyLoadingText(null);
     setReplyLoading(false);
     setReplyError(null);
+    setBlank(true);
   }
 
   parent.postMessage(
@@ -93,6 +95,7 @@ function Plugin() {
 
   async function handleSubmit(prompt: string) {
     resetReply();
+    setBlank(false);
     setReplyLoading(true);
     if (!user) {
       setReplyLoading(false);
@@ -177,12 +180,13 @@ function Plugin() {
         replyLoading={replyLoading}
         replyLoadingText={replyLoadingText}
         replyError={replyError}
-        handleSubmit={function (): void {
-          handleSubmit("");
+        handleSubmit={function (prompt): void {
+          handleSubmit(prompt);
         }}
         handleReset={function (): void {
           resetReply();
         }}
+        blank={blank}
       />
     </div>
   );

@@ -299,6 +299,3 @@ function rgbToHex(r: number, g: number, b: number) {
     value.toString(16).padStart(2, "0").toUpperCase();
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
-
-// Example usage
-console.log(rgbToHex(255, 99, 71)); // Outputs: #FF6347

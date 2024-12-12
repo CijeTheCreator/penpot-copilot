@@ -60,7 +60,6 @@ export function ChatInterface({
       <div className="flex flex-col">
         <div className="flex flex-col flex-1">
           <div className="pb-[200px] pt-4 md:pt-10">
-            {/* TODO: Fix this logic */}
             {!blank ? (
               <div className="relative mx-auto max-w-3xl px-4">
                 <Question question={question} />
@@ -92,57 +91,61 @@ export function ChatInterface({
 
               setQuestion(value);
               handleSubmit(value);
-              //TODO: Answer is the reply in this case
-              // setAnswer(responseMessage.textAnswer);
             }}
           >
-            <div className="relative flex flex-col w-full px-4 overflow-hidden max-h-60 grow  dark:bg-emerald-700 bg-emerald-50 sm:rounded-md sm:border sm:px-16">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="absolute left-0 w-8 h-8 p-0 rounded-full top-4 dark:bg-emerald-900 sm:left-4"
-                    onClick={() => handleReset()}
-                  >
-                    <Plus className="h-4 w-4" />
-                    <span className="sr-only">Reset</span>
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Reset</TooltipContent>
-              </Tooltip>
-              <Textarea
-                ref={inputRef}
-                tabIndex={0}
-                onKeyDown={onKeyDown}
-                placeholder="Send a message."
-                className="min-h-[60px] w-full resize-none bg-transparent py-[1.3rem] focus-within:outline-none sm:text-sm dark:text-emerald-50 bg:white text-emerald-900"
-                autoFocus
-                spellCheck={false}
-                autoComplete="off"
-                autoCorrect="off"
-                name="message"
-                rows={1}
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-              />
-              <div className="absolute right-0 top-4 sm:right-4">
+            {blank ? (
+              <div className="relative flex flex-col w-full px-4 overflow-hidden max-h-60 grow    sm:rounded-md sm:border sm:px-16">
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
-                      type="submit"
+                      variant="outline"
                       size="icon"
-                      disabled={inputValue === ""}
-                      variant={"outline"}
+                      className="absolute left-0 w-8 h-8 p-0 rounded-full top-4  sm:left-4"
+                      onClick={() => handleReset()}
                     >
-                      <IconPaperPlane />
-                      <span className="sr-only">Send message</span>
+                      <Plus className="h-4 w-4" />
+                      <span className="sr-only">Reset</span>
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>Send message</TooltipContent>
+                  <TooltipContent>Reset</TooltipContent>
                 </Tooltip>
+                <Textarea
+                  ref={inputRef}
+                  tabIndex={0}
+                  onKeyDown={onKeyDown}
+                  placeholder="Send a message."
+                  className="min-h-[60px] w-full resize-none bg-transparent py-[1.3rem] focus-within:outline-none sm:text-sm "
+                  autoFocus
+                  spellCheck={false}
+                  autoComplete="off"
+                  autoCorrect="off"
+                  name="message"
+                  rows={1}
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                />
+                <div className="absolute right-0 top-4 sm:right-4">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        type="submit"
+                        size="icon"
+                        disabled={inputValue === ""}
+                        variant={"outline"}
+                      >
+                        <IconPaperPlane />
+                        <span className="sr-only">Send message</span>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Send message</TooltipContent>
+                  </Tooltip>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="flex flex-row w-full items-center justify-center">
+                <Button>New Request</Button>
+              </div>
+            )}
           </form>
         </div>
       </div>
