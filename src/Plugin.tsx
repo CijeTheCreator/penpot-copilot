@@ -41,6 +41,12 @@ function Plugin() {
 
 export default Plugin;
 
+function handleCreate(prompt: string, userId: string, openAIKey: string) {}
+function handleMultiple(prompt: string, userId: string, openAIKey: string) {}
+function handleUndefined(prompt: string, userId: string, openAIKey: string) {}
+function handleEdit(prompt: string, userId: string, openAIKey: string) {}
+function handleDelete(prompt: string, userId: string, openAIKey: string) {}
+
 function createPenpotTree(innerHTML: string) {
   const { tempContainer, newElement } = createElementInDOM(innerHTML);
   const penpotTree = htmlToPenpot(newElement);
