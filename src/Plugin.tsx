@@ -41,14 +41,6 @@ async function handleCreate(prompt: string, userId: string) {
   }
 }
 
-//TODO: Coming soon for all these
-// async function handleMultiple(prompt: string, userId: string) {}
-// async function handleUndefined(prompt: string, userId: string) {}
-// async function handleEdit(prompt: string, userId: string) {}
-
-//TODO: Make this logic last
-// async function handleDelete(prompt: string, userId: string) {}
-
 function createPenpotTree(innerHTML: string) {
   const { tempContainer, newElement } = createElementInDOM(innerHTML);
   const penpotTree = htmlToPenpot(newElement);

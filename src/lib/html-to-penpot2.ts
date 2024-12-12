@@ -297,7 +297,7 @@ const getLayersForElement = (el: Element) => {
 
 export function isHidden(element: Element) {
   element;
-  // TODO: Uncomment this for the html to penpot plugin
+  // Uncomment this for the html to penpot plugin
   // let el: Element | null = element;
   // do {
   //   const computed = getComputedStyle(el);

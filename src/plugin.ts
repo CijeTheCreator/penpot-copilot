@@ -170,8 +170,8 @@ function createTree(root: PenpotNode, parent?: Board) {
         });
         rectangle.shadows = shadows;
       }
-      applyConstraints(root, rectangle);
       parent?.appendChild(rectangle);
+      applyConstraints(root, rectangle);
       break;
     }
 
@@ -182,7 +182,6 @@ function createTree(root: PenpotNode, parent?: Board) {
       if (root.y) text.y = root.y!;
       if (root.width && root.height) text.resize(root.width!, root.height!);
       if (root.fills) applyFill(root.fills!, text);
-      applyConstraints(root, text);
       if (root.letterSpacing) text.letterSpacing = `${root.letterSpacing}`;
       if (root.fontSize) text.fontSize = `${root.fontSize}`;
       if (root.textCase) {
@@ -227,6 +226,7 @@ function createTree(root: PenpotNode, parent?: Board) {
       //TODO: fontId??
       // if (root.fontFamily) text.fontFamily = root.fontFamily;
       parent?.appendChild(text);
+      applyConstraints(root, text);
       break;
     }
 
@@ -236,8 +236,8 @@ function createTree(root: PenpotNode, parent?: Board) {
       if (root.x) svg.x = root.x!;
       if (root.y) svg.y = root.y!;
       if (root.width && root.height) svg.resize(root.width!, root.height!);
-      applyConstraints(root, svg);
       parent?.appendChild(svg);
+      applyConstraints(root, svg);
       break;
     }
     default: {
