@@ -40,7 +40,15 @@ function Plugin() {
 }
 
 export default Plugin;
-
+async function handleInitialPrompt(
+  prompt: string,
+  userId: string,
+  openAIKey: string,
+): Promise<
+  "create" | "edit" | "delete" | "rag" | "undefined" | "multiple" | "error"
+> {
+  return "undefined";
+}
 function handleCreate(prompt: string, userId: string, openAIKey: string) {}
 function handleMultiple(prompt: string, userId: string, openAIKey: string) {}
 function handleUndefined(prompt: string, userId: string, openAIKey: string) {}
