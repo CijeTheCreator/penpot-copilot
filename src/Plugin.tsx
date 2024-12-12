@@ -180,6 +180,9 @@ function Plugin() {
         handleSubmit={function (): void {
           handleSubmit("");
         }}
+        handleReset={function (): void {
+          resetReply();
+        }}
       />
     </div>
   );
