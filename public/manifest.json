@@ -1,6 +1,6 @@
 {
-  "name": "React example plugin",
-  "description": "Example plugin with react",
+  "name": "Penpot Copilot",
+  "description": "AI-powered designs",
   "code": "/plugin.js",
   "icon": "/icon.png",
   "permissions": [
