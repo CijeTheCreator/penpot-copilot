@@ -148,10 +148,10 @@ export function ChatInterface({
                   className="hidden"
                   onClick={() => handleReset()}
                 >
-                  New Request
+                  Reset
                 </Button>
                 <Button type="button" onClick={() => handleReset()}>
-                  New Request
+                  Reset
                 </Button>
               </div>
             )}
