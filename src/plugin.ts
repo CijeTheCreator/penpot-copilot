@@ -109,7 +109,7 @@ type TMessage_IDRequest = {
   message: "id_request";
 };
 //
-penpot.ui.open("Activity Tracker", `?theme=${penpot.theme},`, {
+penpot.ui.open("Penpot copilot", `?theme=${penpot.theme},`, {
   width: 430,
   height: 465,
 });
