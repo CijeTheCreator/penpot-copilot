@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect } from "react";
-// import "./App.css";
 import { htmlToPenpot } from "./lib/html-to-penpot2";
 import { fetchWebpageServer, fillBucketServer } from "./lib/server";
 import { useSearchParams } from "react-router-dom";
-import { testCSS, testHtml } from "../testInnerHtml";
 
 function TestHTML() {
   const [searchParams] = useSearchParams();
