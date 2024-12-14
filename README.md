@@ -1,6 +1,6 @@
-# Penpot Activity Tracker: Private Insights into Your Workflow
+# Penpot Copilot: AI-Powered Design Assistant
 
-![Penpot Activity Tracker: Private Insights into Your Workflow](/.github/images/thumb.png "Penpot Activity Tracker: Private Insights into Your Workflow")
+![Penpot Copilot: AI-Powered Design Assistant](/.github/images/thumb.png "Penpot Copilot: AI-Powered Design Assistant")
 
 ## :toolbox: Getting Started
 
@@ -10,27 +10,27 @@
 
 ## Description
 
-The Penpot Activity Tracker plugin offers a privacy-focused way to monitor your design workflow. This tool allows you to track time spent on projects, view detailed activity logs, and gain insights into team collaborations. All activity data is decrypted locally for enhanced privacy before being securely synced with the server.
+Penpot Copilot is your AI-powered design assistant, revolutionizing the way you create. With Penpot Copilot, you can turn your ideas into stunning designs effortlessly. Simply describe your vision, and watch as it comes to life in real time. If you can think it, you can design it!
 
-1. **Activity Logs**:
+1. **AI-Driven Design**:
 
-   - Track time spent on each project and task.
-   - Access detailed logs to analyze productivity and trends.
+   - Generate components and layouts based on natural language descriptions.
+   - Effortlessly bring your creative ideas to life without needing advanced design skills.
 
-2. **Collaboration Insights**:
-   - View contributions and collaborative activities across your team.
-   - Gain visibility into shared projects and joint efforts.
+2. **Real-Time Collaboration**:
+   - Share your AI-generated designs instantly with your team.
+   - Enhance collaborative workflows by integrating AI seamlessly into the design process.
 
 ## Features
 
-1. **Private Activity Tracking**: Monitor time, projects, and collaborations with secure local decryption.
-2. **Detailed Logs**: Access comprehensive activity data for better decision-making.
-3. **Collaboration Metrics**: Gain insights into team efforts and shared projects.
-4. **Streamlined Syncing**: Securely sync your activity data to the server for safe storage.
+1. **AI Component Generation**: Create custom components and layouts by describing them in plain language.
+2. **Creative Assistance**: Receive design suggestions tailored to your project’s needs.
+3. **Real-Time Design Rendering**: Watch your ideas transform into tangible designs as you describe them.
+4. **Team Collaboration**: Share AI-generated designs with teammates and iterate together effortlessly.
 
 ## :camera: Screenshots
 
-![Screenshot](/.github/images/ActivityTracker1.png "Track time spent and projects worked on")  
-![Screenshot](/.github/images/ActivityTracker2.png "Visualize collaboration insights and contributions")
-![Screenshot](/.github/images/ActivityTracker3.png "Visualize collaboration insights and contributions")
-![Screenshot](/.github/images/ActivityTracker4.png "Visualize collaboration insights and contributions")
+![Screenshot](/.github/images/screenshot2.png "See real-time rendering of your ideas as designs")
+![Screenshot](/.github/images/screenshot1.png "Describe your vision and let AI generate components")
+
+Transform your workflow with Penpot Copilot—your AI design companion for faster, smarter, and more intuitive creation.
