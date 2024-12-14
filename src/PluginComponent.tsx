@@ -7,6 +7,7 @@ import {
   createBucketServer,
   TPollBucket,
   pollBucketServer,
+  FE_ADDRESS,
   // getUserTrialsServer,
 } from "./lib/server";
 import { ChatInterface } from "./components/ChatInterface";
@@ -55,7 +56,7 @@ async function createPenpotTree(html: string, css: string) {
       throw new Error("Issue creating bucket");
     const bucketId = fillBucketResponse.bucketId;
     const newTab = window.open(
-      `http://localhost:4402/test?bucketId=${bucketId}`,
+      `${FE_ADDRESS}/test?bucketId=${bucketId}`,
       "_blank",
     );
     if (!newTab)

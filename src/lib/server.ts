@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const ADDRESS = "https://penpot-copilot-backend.onrender.com";
+export const FE_ADDRESS = "https://penpot-copilot.vercel.app";
 
 type TOG_Response = {
   success: boolean;
