@@ -66,7 +66,7 @@ export function AILoading({
     <div className="prose break-words dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 mb-3 space-y-2 pt-4">
       <div className="flex flex-row gap-2">
         <PulseLoader color={PRIMARY_COLOR_HEX} />
-        {replyLoadingText ? replyLoadingText : ""}
+        <div className="italic">{replyLoadingText ? replyLoadingText : ""}</div>
       </div>
     </div>
   );

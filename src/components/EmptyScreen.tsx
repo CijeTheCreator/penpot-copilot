@@ -9,10 +9,10 @@ export function EmptyScreen() {
           <IconSparkles className="inline mr-0 ml-0.5 w-4 sm:w-5 mb-1 " />
         </span>
         <p className="mb-2 leading-normal text-center">
-          "Transform your ideas into stunning designs effortlessly with Penpot
+          Transform your ideas into stunning designs effortlessly with Penpot
           Copilot, your AI-powered design assistant. Just describe your vision,
           and watch it come to life in real time—if you can think it, you can
-          design it!"
+          design it!
         </p>
         {/* <p className="mb-2 leading-normal text-center"> */}
         {/*   Ask anything about your Penpot designs and get instant answers. Create */}

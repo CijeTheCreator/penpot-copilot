@@ -172,11 +172,12 @@ function PluginComponent() {
         return;
       }
       case "create": {
-        setReplyLoading(false);
+        // setReplyLoading(false);
         setReplyLoadingText("Creating component");
 
         const createState = await handleCreate(prompt, user);
         if (createState == "success") {
+          setReplyLoading(false);
           return setReply("Your component has been created, hope you like it");
         } else {
           return setReplyError(`Error creating component: ${createState}`);
