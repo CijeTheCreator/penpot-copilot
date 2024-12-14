@@ -90,3 +90,92 @@ export async function getUserTrialsServer(
     return errorResponse;
   }
 }
+
+export type TPollBucket = {
+  success: boolean;
+  pollResult: boolean;
+  bucketId: string | null;
+  penpotTree: string | null;
+  error: string | null;
+};
+export async function pollBucketServer(bucketId: string): Promise<TPollBucket> {
+  try {
+    const response = await axios.post(`${ADDRESS}/poll_bucket`, {
+      bucketId,
+    });
+    if (response.status == 505 || response.status == 200) {
+      const responseData = response.data as TPollBucket;
+      return responseData;
+    } else {
+      throw new Error("Server issue");
+    }
+  } catch (error) {
+    const catchError = error as Error;
+    const errorResponse: TPollBucket = {
+      success: false,
+      pollResult: false,
+      bucketId: null,
+      penpotTree: null,
+      error: catchError.message,
+    };
+    return errorResponse;
+  }
+}
+
+type TCreateBucket = {
+  success: boolean;
+  bucketId: string | null;
+  error: string | null;
+};
+export async function createBucketServer(): Promise<TCreateBucket> {
+  try {
+    const response = await axios.post(`${ADDRESS}/create_bucket`);
+    if (response.status == 505 || response.status == 200) {
+      const responseData = response.data as TCreateBucket;
+      return responseData;
+    } else {
+      throw new Error("Server issue");
+    }
+  } catch (error) {
+    const catchError = error as Error;
+    const errorResponse: TCreateBucket = {
+      success: false,
+      bucketId: null,
+      error: catchError.message,
+    };
+    return errorResponse;
+  }
+}
+
+type TFillBucket = {
+  success: boolean;
+  bucketId: string | null;
+  penpotTree: string | null;
+  error: string | null;
+};
+export async function fillBucketServer(
+  bucketId: string,
+  penpotTree: string,
+): Promise<TFillBucket> {
+  try {
+    const response = await axios.post(`${ADDRESS}/fill_bucket`, {
+      bucketId,
+      penpotTree,
+    });
+    if (response.status == 505 || response.status == 200) {
+      const responseData = response.data as TFillBucket;
+      return responseData;
+    } else {
+      throw new Error("Server issue");
+    }
+  } catch (error) {
+    const catchError = error as Error;
+    const errorResponse: TFillBucket = {
+      success: false,
+      bucketId: null,
+      penpotTree: null,
+      error: catchError.message,
+    };
+    return errorResponse;
+  }
+}

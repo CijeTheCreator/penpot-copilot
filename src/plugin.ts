@@ -6,14 +6,40 @@ import {
   Shadow,
   Color as PenpotColor,
 } from "@penpot/plugin-types";
-import {
-  Color,
-  Effect,
-  Stroke,
-  StrokeWeight,
-  Unit,
-} from "./lib/html-to-penpot2";
+import rgbHex from "rgb-hex";
 
+type BLEND_MODE = "NORMAL";
+export type WithRef<T> = Partial<T> & { ref?: Element | Node };
+type SHADOW_EFFECT_TYPE = "DROP_SHADOW";
+export type ShadowEffect = {
+  color: Color;
+  type: SHADOW_EFFECT_TYPE;
+  blur_radius: number;
+  spread_radius: number;
+  blendMode: BLEND_MODE;
+  visible: boolean;
+  offset: {
+    x: number;
+    y: number;
+  };
+};
+interface Unit {
+  unit: "PIXELS";
+  value: number;
+}
+type STROKE_TYPE = "SOLID";
+type StrokeWeight = number;
+type Stroke = {
+  type: STROKE_TYPE;
+  color: Color;
+  opacity: number;
+};
+type Color = {
+  r: number;
+  g: number;
+  b: number;
+};
+type Effect = WithRef<ShadowEffect>;
 type SolidPaint = {
   type: "SOLID";
   color: Color;
@@ -32,7 +58,7 @@ type Constraints = {
   vertical: "center" | "bottom" | "top" | "scale";
 };
 
-type PenpotNode = {
+export type PenpotNode = {
   type: "SVG" | "RECTANGLE" | "TEXT" | "FRAME";
   width?: number;
   height?: number;
@@ -68,36 +94,36 @@ type PenpotNode = {
     g: number;
     b: number;
   };
-  textAlignHorizontal: "left" | "center" | "right" | "justified";
+  textAlignHorizontal: "LEFT" | "CENTER" | "RIGHT" | "JUSTIFIED";
   textDecoration: "underline" | "strikethrough";
   svg: string;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 type PenpotComponent = PenpotNode[];
-type TMessage_CreateComponent = {
+export type TMessage_CreateComponent = {
   message: "create_component";
   componentTree: PenpotComponent;
 };
 type TMessage_IDRequest = {
   message: "id_request";
 };
-
+//
 penpot.ui.open("Activity Tracker", `?theme=${penpot.theme},`, {
-  width: 320,
+  width: 400,
   height: 445,
 });
-
+//
 penpot.ui.onMessage<TMessage_IDRequest | TMessage_CreateComponent>(
   async (message) => {
     const type = message.message;
     if (type == "id_request") {
+      //TODO: Current fix till id starts working again
       penpot.ui.sendMessage({
         type: "user_id_response",
-        userId: penpot.currentUser.id,
+        userId: "0987654321",
       });
     }
-
     if (type == "create_component") {
       const componentTree = message.componentTree;
       componentTree.forEach((root) => {
@@ -114,11 +140,16 @@ function createTree(root: PenpotNode, parent?: Board) {
       if (root.x) board.x = root.x!;
       if (root.y) board.y = root.y!;
       if (root.width && root.height) board.resize(root.width!, root.height!);
+      if (parent) parent.appendChild(board);
       if (root.constraints)
         board.constraintsVertical = root.constraints!.vertical;
       if (root.constraints)
         board.constraintsHorizontal = root.constraints!.horizontal;
-      if (parent) parent.appendChild(board);
+      if (!root.children || !(root.children.length != 0)) return;
+      for (let i = root.children.length - 1; i > -1; i--) {
+        const innerchild = root.children[i];
+        createTree(innerchild, board);
+      }
       break;
     }
     case "RECTANGLE": {
@@ -198,17 +229,20 @@ function createTree(root: PenpotNode, parent?: Board) {
         }
       }
       if (root.textAlignHorizontal) {
+        console.log("if (root.textAlignHorizontal) {");
+        console.log(root.textAlignHorizontal);
         switch (root.textAlignHorizontal) {
-          case "left":
-            text.align = "left";
+          case "LEFT":
+            text.align = "LEFT";
             break;
-          case "center":
+          case "CENTER":
+            console.log("case 'center':");
             text.align = "center";
             break;
-          case "right":
+          case "RIGHT":
             text.align = "right";
             break;
-          case "justified":
+          case "JUSTIFIED":
             text.align = "justify";
             break;
         }
@@ -245,10 +279,9 @@ function createTree(root: PenpotNode, parent?: Board) {
     }
   }
 
-  if (!root.children || !(root.children.length != 0)) return;
-  root.children.forEach((innerchild) => {
-    createTree(innerchild, board);
-  });
+  // root.children.forEach((innerchild) => {
+  //   createTree(innerchild, board);
+  // });
 }
 
 function applyConstraints(root: PenpotNode, shape: Shape) {
@@ -258,12 +291,20 @@ function applyConstraints(root: PenpotNode, shape: Shape) {
     shape.borderRadiusBottomLeft = root.bottomLeftRadius;
   if (root.bottomRightRadius)
     shape.borderRadiusBottomRight = root.bottomRightRadius;
-  shape.constraintsHorizontal = root.constraints!.horizontal;
-  shape.constraintsVertical = root.constraints!.vertical;
+  if (root.constraints)
+    shape.constraintsHorizontal = root.constraints!.horizontal;
+  if (root.constraints) shape.constraintsVertical = root.constraints!.vertical;
 }
 
 function applyFill(fills: Paint[] | undefined, penpotNode: Shape) {
-  if (!fills || fills.length == 0) return;
+  if (!fills || fills.length == 0) {
+    penpotNode.fills = [
+      {
+        fillOpacity: 0,
+      },
+    ];
+    return;
+  }
   Promise.all(
     fills.map(async (value) => {
       if (value.type == "SOLID") {
@@ -292,10 +333,6 @@ function applyFill(fills: Paint[] | undefined, penpotNode: Shape) {
 }
 
 function rgbToHex(r: number, g: number, b: number) {
-  if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
-    throw new Error("RGB values must be in the range 0-255");
-  }
-  const toHex = (value: number) =>
-    value.toString(16).padStart(2, "0").toUpperCase();
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+  const rgbString = `rgb(${r}, ${g}, ${b})`;
+  return `#${rgbHex(rgbString)}`;
 }

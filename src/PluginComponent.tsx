@@ -5,10 +5,16 @@ import { htmlToPenpot } from "./lib/html-to-penpot2";
 import {
   ogResponseServer,
   createHTMLServer,
+  createBucketServer,
+  TPollBucket,
+  pollBucketServer,
   // getUserTrialsServer,
 } from "./lib/server";
 import { ChatInterface } from "./components/ChatInterface";
-// import { testHtml } from "./testInnerHtml";
+import { MgetHTML } from "./lib/mocks";
+import { TMessage_CreateComponent } from "./plugin";
+import { testHtml } from "./testInnerHtml";
+import { mockTree } from "./lib/mockTree";
 
 type TPossibleOGOutcomes =
   | "create"
@@ -31,22 +37,96 @@ async function handleInitialPrompt(
   }
 }
 async function handleCreate(prompt: string, userId: string) {
-  const possibleHtml = await createHTMLServer(userId, prompt);
-  if (possibleHtml.success && possibleHtml.html) {
-    const html = possibleHtml.html;
-    createPenpotTree(html);
-    return "success";
-  } else {
-    return possibleHtml.error!;
+  const html = MgetHTML();
+  createPenpotTree(html);
+  return "success";
+}
+// FIXME: real implementation below
+// async function handleCreate(prompt: string, userId: string) {
+//   const possibleHtml = await createHTMLServer(userId, prompt);
+//   if (possibleHtml.success && possibleHtml.html) {
+//     const html = possibleHtml.html;
+//     createPenpotTree(html);
+//     return "success";
+//   } else {
+//     return possibleHtml.error!;
+//   }
+// }
+const workingHtml = `
+<div class="flex items-center justify-center h-screen w-full">
+  <div class="bg-black text-white p-8 rounded">
+    This is a centered particle.
+  </div>
+</div>
+`;
+async function createPenpotTree2() {
+  try {
+    const innerHTML = workingHtml;
+    const rawCss = "";
+    const fillBucketResponse = await createBucketServer();
+    if (!fillBucketResponse.success || !fillBucketResponse.bucketId)
+      throw new Error("Issue creating bucket");
+    const fillBucket = fillBucketResponse.bucketId;
+    const html = encodeURIComponent(innerHTML);
+    const css = encodeURIComponent(rawCss);
+    const newTab = window.open(
+      `http://localhost:4402/test?fillBucket=${fillBucket}&html=${html}$css=${css}`,
+      "_blank",
+    );
+    if (!newTab)
+      throw new Error(
+        "Failed to open new tab (likely blocked by a popup blocker).",
+      );
+    await poll(pollBucketServer, 1000, 20000, fillBucket);
+    const penpotTreeResponse = await pollBucketServer(fillBucket);
+    if (!penpotTreeResponse.penpotTree)
+      throw new Error("Failed to create tree");
+    const penpotTree = JSON.parse(penpotTreeResponse.penpotTree);
+    const penpotCreateMessage: TMessage_CreateComponent = {
+      message: "create_component",
+      componentTree: penpotTree,
+    };
+    parent.postMessage(penpotCreateMessage, "*");
+  } catch (error) {
+    const catchError = error as Error;
+    console.error(catchError.message);
   }
 }
-
-function createPenpotTree(innerHTML: string) {
+function createPenpotTree() {
+  const innerHTML = workingHtml;
   const { tempContainer, newElement } = createElementInDOM(innerHTML);
   const penpotTree = htmlToPenpot(newElement);
+  const penpotCreateMessage: TMessage_CreateComponent = {
+    message: "create_component",
+    componentTree: mockTree,
+  };
+  parent.postMessage(penpotCreateMessage, "*");
   console.log(JSON.stringify(penpotTree));
-  document.body.removeChild(tempContainer);
+  // document.body.removeChild(tempContainer);
 }
+// function createPenpotTree(innerHTML: string) {
+//   const newElement = document.querySelector("body");
+//   if (!newElement) return console.log("Failed to get new element");
+//   const penpotTree = htmlToPenpot(newElement);
+//   const penpotCreateMessage: TMessage_CreateComponent = {
+//     message: "create_component",
+//     componentTree: penpotTree,
+//   };
+//   parent.postMessage(penpotCreateMessage, "*");
+//   console.log(JSON.stringify(penpotTree));
+// }
+// FIXME: Mock Implementation above
+// function createPenpotTree(innerHTML: string) {
+//   const { tempContainer, newElement } = createElementInDOM(innerHTML);
+//   const penpotTree = htmlToPenpot(newElement);
+//   const penpotCreateMessage: TMessage_CreateComponent = {
+//     message: "create_component",
+//     componentTree: penpotTree,
+//   };
+//   parent.postMessage(penpotCreateMessage, "*");
+//   console.log(JSON.stringify(penpotTree));
+//   document.body.removeChild(tempContainer);
+// }
 
 function createElementInDOM(innerHTML: string) {
   const tempContainer = document.createElement("div");
@@ -58,7 +138,7 @@ function createElementInDOM(innerHTML: string) {
   tempContainer.appendChild(newElement);
   return { tempContainer, newElement };
 }
-function Plugin() {
+function PluginComponent() {
   const url = new URL(window.location.href);
   const initialTheme = url.searchParams.get("theme");
   const [theme] = useState(initialTheme || null);
@@ -94,7 +174,9 @@ function Plugin() {
       setReplyError("User details not available yet");
       return;
     }
-    const intent = await handleInitialPrompt(prompt, user);
+    //FIXME: Intent implementation below
+    // const intent = await handleInitialPrompt(prompt, user);
+    const intent = "create";
     switch (intent) {
       case "undefined": {
         setReplyLoading(false);
@@ -163,10 +245,7 @@ function Plugin() {
   }, []);
 
   return (
-    <div
-      data-theme={theme}
-      className="flex flex-col gap-4 items-center p-4 dark w-full h-full"
-    >
+    <div data-theme={theme} className="p-4 dark w-full h-full">
       <ChatInterface
         reply={reply}
         replyLoading={replyLoading}
@@ -184,4 +263,28 @@ function Plugin() {
   );
 }
 
-export default Plugin;
+export default PluginComponent;
+
+async function poll(
+  checkFunction: (bucketId: string) => Promise<TPollBucket>,
+  interval: number,
+  timeout: number,
+  bucketId: string,
+) {
+  const startTime = Date.now();
+
+  return new Promise((resolve, reject) => {
+    const timer = setInterval(async () => {
+      const resultResponse = await checkFunction(bucketId);
+      const result = resultResponse.pollResult;
+
+      if (result) {
+        clearInterval(timer);
+        resolve(result);
+      } else if (Date.now() - startTime >= timeout) {
+        clearInterval(timer);
+        reject(new Error("Polling timed out."));
+      }
+    }, interval);
+  });
+}

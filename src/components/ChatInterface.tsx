@@ -59,7 +59,7 @@ export function ChatInterface({
     <div>
       <div className="flex flex-col">
         <div className="flex flex-col flex-1">
-          <div className="pb-[200px] pt-4 md:pt-10">
+          <div className="">
             {!blank ? (
               <div className="relative mx-auto max-w-3xl px-4">
                 <Question question={question} />
@@ -77,7 +77,7 @@ export function ChatInterface({
         </div>
       </div>
       <div className="fixed inset-x-0 bottom-0 w-full peer-[[data-state=open]]:group-[]:lg:pl-[250px] peer-[[data-state=open]]:group-[]:xl:pl-[300px] z-50">
-        <div className="mx-auto sm:max-w-3xl sm:px-4 mb-12">
+        <div className="mx-auto sm:max-w-3xl sm:px-4">
           <form
             ref={formRef}
             onSubmit={async (e) => {
@@ -94,13 +94,13 @@ export function ChatInterface({
             }}
           >
             {blank ? (
-              <div className="relative flex flex-col w-full px-4 overflow-hidden max-h-60 grow    sm:rounded-md sm:border sm:px-16">
+              <div className="relative flex flex-col w-full px-4 overflow-hidden max-h-60 grow  bg-accent   sm:rounded-md sm:border sm:px-16">
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
                       variant="outline"
                       size="icon"
-                      className="absolute left-0 w-8 h-8 p-0 rounded-full top-4  sm:left-4"
+                      className="absolute left-0 w-8 h-8 p-0 rounded-full top-4  sm:left-4 bg-background ml-2"
                       onClick={() => handleReset()}
                     >
                       <Plus className="h-4 w-4" />
@@ -114,7 +114,7 @@ export function ChatInterface({
                   tabIndex={0}
                   onKeyDown={onKeyDown}
                   placeholder="Send a message."
-                  className="min-h-[60px] w-full resize-none bg-transparent py-[1.3rem] focus-within:outline-none sm:text-sm "
+                  className="min-h-[60px] w-full bg-accent resize-none  py-[1.3rem] focus-within:outline-none sm:text-sm px-8"
                   autoFocus
                   spellCheck={false}
                   autoComplete="off"
@@ -124,7 +124,7 @@ export function ChatInterface({
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                 />
-                <div className="absolute right-0 top-4 sm:right-4">
+                <div className="absolute right-0 top-4 sm:right-4 mr-2">
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
@@ -143,7 +143,16 @@ export function ChatInterface({
               </div>
             ) : (
               <div className="flex flex-row w-full items-center justify-center">
-                <Button>New Request</Button>
+                <Button
+                  type="submit"
+                  className="hidden"
+                  onClick={() => handleReset()}
+                >
+                  New Request
+                </Button>
+                <Button type="button" onClick={() => handleReset()}>
+                  New Request
+                </Button>
               </div>
             )}
           </form>

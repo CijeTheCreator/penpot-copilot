@@ -3,9 +3,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type TYPE = "SVG" | "RECTANGLE" | "TEXT" | "FRAME";
 type STROKE_TYPE = "SOLID";
+export type StrokeWeight = number;
 type SHADOW_EFFECT_TYPE = "DROP_SHADOW";
 type BLEND_MODE = "NORMAL";
-export type StrokeWeight = number;
 export type Effect = WithRef<ShadowEffect>;
 export type Stroke = {
   type: STROKE_TYPE;
@@ -57,7 +57,7 @@ type RectangleNode = {
   constraints: Constraints;
 };
 
-type FrameNode = {
+export type FrameNode = {
   type: TYPE;
   x: number;
   y: number;
@@ -79,7 +79,7 @@ type TextNode = {
   fills: Paint[];
   letterSpacing: Unit;
   lineHeight: Unit;
-  textCase: "UPPER" | "LOWER" | "TITLE";
+  textCase: "upper" | "lower" | "title";
   fontSize: number;
   textDecoration: any;
   textAlignHorizontal: any;
@@ -150,7 +150,8 @@ export function htmlToPenpot(selector: HTMLElement, time = true) {
 
   layers.unshift(root);
 
-  const framesLayers = getLayersForFrames({ layers, root });
+  // const framesLayers = getLayersForFrames({ layers, root });
+  const framesLayers = layers;
 
   removeRefs({ layers: framesLayers, root });
 
@@ -514,9 +515,9 @@ export function getRgb(colorString?: string | null) {
 
   if (r && g && b && !none) {
     return {
-      r: parseInt(r) / 255,
-      g: parseInt(g) / 255,
-      b: parseInt(b) / 255,
+      r: parseInt(r),
+      g: parseInt(g),
+      b: parseInt(b),
       a: a ? parseFloat(a) : 1,
     };
   }
@@ -891,15 +892,15 @@ export const buildTextNode = ({
     const { textTransform } = computedStyles;
     switch (textTransform) {
       case "uppercase": {
-        textNode.textCase = "UPPER";
+        textNode.textCase = "upper";
         break;
       }
       case "lowercase": {
-        textNode.textCase = "LOWER";
+        textNode.textCase = "lower";
         break;
       }
       case "capitalize": {
-        textNode.textCase = "TITLE";
+        textNode.textCase = "title";
         break;
       }
     }
@@ -917,7 +918,7 @@ export const buildTextNode = ({
       ["underline", "strikethrough"].includes(computedStyles.textDecoration)
     ) {
       textNode.textDecoration =
-        computedStyles.textDecoration.toUpperCase() as any;
+        computedStyles.textDecoration.toLowerCase() as any;
     }
 
     if (
@@ -926,7 +927,7 @@ export const buildTextNode = ({
       )
     ) {
       textNode.textAlignHorizontal =
-        computedStyles.textAlign.toUpperCase() as any;
+        computedStyles.textAlign.toLowerCase() as any;
     }
 
     return textNode;

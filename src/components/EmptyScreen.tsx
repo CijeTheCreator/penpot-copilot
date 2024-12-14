@@ -2,7 +2,7 @@ import { IconSparkles } from "./Icons";
 
 export function EmptyScreen() {
   return (
-    <div className="mx-auto max-w-3xl px-4 mt-12">
+    <div className="mx-auto max-w-3xl px-4">
       <div className="rounded-md p-8 dark:border-none border border-foreground-muted  mb-4 w-full justify-center flex flex-col items-center">
         <span className="text-2xl flex items-center my-5">
           Penpot Copilot
