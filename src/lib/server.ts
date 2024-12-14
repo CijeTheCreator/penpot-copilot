@@ -36,6 +36,7 @@ export async function ogResponseServer(
 type TCreateHTMLResponse = {
   success: boolean;
   html: string | null;
+  css?: string | null;
   error: string | null;
 };
 export async function createHTMLServer(
@@ -47,7 +48,7 @@ export async function createHTMLServer(
       userId,
       prompt,
     });
-    if (response.status == 505 || response.status == 200) {
+    if (response.status == 200) {
       const responseData = response.data as TCreateHTMLResponse;
       return responseData;
     } else {
@@ -75,7 +76,7 @@ export async function getUserTrialsServer(
     const response = await axios.post(`${ADDRESS}/get_user_trials`, {
       userId,
     });
-    if (response.status == 505 || response.status == 200) {
+    if (response.status == 200) {
       const responseData = response.data as TGetUserTrials;
       return responseData;
     } else {
@@ -103,7 +104,7 @@ export async function pollBucketServer(bucketId: string): Promise<TPollBucket> {
     const response = await axios.post(`${ADDRESS}/poll_bucket`, {
       bucketId,
     });
-    if (response.status == 505 || response.status == 200) {
+    if (response.status == 200) {
       const responseData = response.data as TPollBucket;
       return responseData;
     } else {
@@ -127,10 +128,16 @@ type TCreateBucket = {
   bucketId: string | null;
   error: string | null;
 };
-export async function createBucketServer(): Promise<TCreateBucket> {
+export async function createBucketServer(
+  html: string,
+  css: string,
+): Promise<TCreateBucket> {
   try {
-    const response = await axios.post(`${ADDRESS}/create_bucket`);
-    if (response.status == 505 || response.status == 200) {
+    const response = await axios.post(`${ADDRESS}/create_bucket`, {
+      html,
+      css,
+    });
+    if (response.status == 200) {
       const responseData = response.data as TCreateBucket;
       return responseData;
     } else {
@@ -140,6 +147,35 @@ export async function createBucketServer(): Promise<TCreateBucket> {
     const catchError = error as Error;
     const errorResponse: TCreateBucket = {
       success: false,
+      bucketId: null,
+      error: catchError.message,
+    };
+    return errorResponse;
+  }
+}
+
+type TFetchWebpage = {
+  bucketId: string | null;
+  html?: string | null;
+  css?: string | null;
+  error: string | null;
+};
+export async function fetchWebpageServer(
+  bucketId: string,
+): Promise<TFetchWebpage> {
+  try {
+    const response = await axios.post(`${ADDRESS}/fetch_webpage`, {
+      bucketId,
+    });
+    if (response.status == 200) {
+      const responseData = response.data as TFetchWebpage;
+      return responseData;
+    } else {
+      throw new Error("Server issue");
+    }
+  } catch (error) {
+    const catchError = error as Error;
+    const errorResponse: TFetchWebpage = {
       bucketId: null,
       error: catchError.message,
     };
@@ -162,7 +198,7 @@ export async function fillBucketServer(
       bucketId,
       penpotTree,
     });
-    if (response.status == 505 || response.status == 200) {
+    if (response.status == 200) {
       const responseData = response.data as TFillBucket;
       return responseData;
     } else {

@@ -36,7 +36,8 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "src"
+    "src",
+    "testInnerHtml.ts"
   ],
   "references": [
     {

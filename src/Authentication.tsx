@@ -2,19 +2,25 @@
 import { useEffect } from "react";
 // import "./App.css";
 import { htmlToPenpot } from "./lib/html-to-penpot2";
-import { fillBucketServer } from "./lib/server";
+import { fetchWebpageServer, fillBucketServer } from "./lib/server";
+import { useSearchParams } from "react-router-dom";
+import { testCSS, testHtml } from "../testInnerHtml";
 
 function TestHTML() {
-  //TODO: Get these from the search params
-  //Make sure css is not reaching here
-  const html = "";
-  const css = "";
-  const bucketId = "";
+  const [searchParams] = useSearchParams();
+  const bucketId = searchParams.get("bucketId");
   useEffect(() => {
     async function fillBucket() {
       try {
         const canvas = document.querySelector("#ceejay") as HTMLElement;
         if (!canvas) throw new Error("No Ceejay");
+        if (!bucketId) throw new Error("Missing bucketId");
+        const { html, css } = await fetchWebpageServer(bucketId);
+        if (!html || !css) throw new Error("Missing html or css");
+        canvas.innerHTML = html;
+        const style = document.createElement("style");
+        style.textContent = css;
+        document.head.appendChild(style);
         const penpotTree = htmlToPenpot(canvas);
         if (penpotTree.length > 0 && penpotTree[0].type == "FRAME") {
           penpotTree.shift();
@@ -34,7 +40,7 @@ function TestHTML() {
   });
   return (
     <div className="w-[1920px] h-[1080px]">
-      <div id="ceejay" className="bg-pink-50 p-8 rounded"></div>
+      <div id="ceejay" className="bg-pink-50 p-8 rounded h-full"></div>
     </div>
   );
 }

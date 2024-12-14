@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
 import "./App.css";
-import { htmlToPenpot } from "./lib/html-to-penpot2";
 import {
   ogResponseServer,
   createHTMLServer,
@@ -11,10 +10,7 @@ import {
   // getUserTrialsServer,
 } from "./lib/server";
 import { ChatInterface } from "./components/ChatInterface";
-import { MgetHTML } from "./lib/mocks";
 import { TMessage_CreateComponent } from "./plugin";
-import { testHtml } from "./testInnerHtml";
-import { mockTree } from "./lib/mockTree";
 
 type TPossibleOGOutcomes =
   | "create"
@@ -37,48 +33,37 @@ async function handleInitialPrompt(
   }
 }
 async function handleCreate(prompt: string, userId: string) {
-  const html = MgetHTML();
-  createPenpotTree(html);
-  return "success";
-}
-// FIXME: real implementation below
-// async function handleCreate(prompt: string, userId: string) {
-//   const possibleHtml = await createHTMLServer(userId, prompt);
-//   if (possibleHtml.success && possibleHtml.html) {
-//     const html = possibleHtml.html;
-//     createPenpotTree(html);
-//     return "success";
-//   } else {
-//     return possibleHtml.error!;
-//   }
-// }
-const workingHtml = `
-<div class="flex items-center justify-center h-screen w-full">
-  <div class="bg-black text-white p-8 rounded">
-    This is a centered particle.
-  </div>
-</div>
-`;
-async function createPenpotTree2() {
   try {
-    const innerHTML = workingHtml;
-    const rawCss = "";
-    const fillBucketResponse = await createBucketServer();
+    const possibleHtml = await createHTMLServer(userId, prompt);
+    if (!(possibleHtml.success && possibleHtml.html && possibleHtml.css))
+      throw new Error(possibleHtml.error!);
+
+    const html = possibleHtml.html;
+    const css = possibleHtml.css;
+    await createPenpotTree(html, css);
+    return "success";
+  } catch (error) {
+    const catchError = error as Error;
+    return catchError.message;
+  }
+}
+
+async function createPenpotTree(html: string, css: string) {
+  try {
+    const fillBucketResponse = await createBucketServer(html, css);
     if (!fillBucketResponse.success || !fillBucketResponse.bucketId)
       throw new Error("Issue creating bucket");
-    const fillBucket = fillBucketResponse.bucketId;
-    const html = encodeURIComponent(innerHTML);
-    const css = encodeURIComponent(rawCss);
+    const bucketId = fillBucketResponse.bucketId;
     const newTab = window.open(
-      `http://localhost:4402/test?fillBucket=${fillBucket}&html=${html}$css=${css}`,
+      `http://localhost:4402/test?bucketId=${bucketId}`,
       "_blank",
     );
     if (!newTab)
       throw new Error(
         "Failed to open new tab (likely blocked by a popup blocker).",
       );
-    await poll(pollBucketServer, 1000, 20000, fillBucket);
-    const penpotTreeResponse = await pollBucketServer(fillBucket);
+    await poll(pollBucketServer, 1000, 20000, bucketId);
+    const penpotTreeResponse = await pollBucketServer(bucketId);
     if (!penpotTreeResponse.penpotTree)
       throw new Error("Failed to create tree");
     const penpotTree = JSON.parse(penpotTreeResponse.penpotTree);
@@ -89,21 +74,21 @@ async function createPenpotTree2() {
     parent.postMessage(penpotCreateMessage, "*");
   } catch (error) {
     const catchError = error as Error;
-    console.error(catchError.message);
+    throw new Error(catchError.message);
   }
 }
-function createPenpotTree() {
-  const innerHTML = workingHtml;
-  const { tempContainer, newElement } = createElementInDOM(innerHTML);
-  const penpotTree = htmlToPenpot(newElement);
-  const penpotCreateMessage: TMessage_CreateComponent = {
-    message: "create_component",
-    componentTree: mockTree,
-  };
-  parent.postMessage(penpotCreateMessage, "*");
-  console.log(JSON.stringify(penpotTree));
-  // document.body.removeChild(tempContainer);
-}
+// function createPenpotTree() {
+//   const innerHTML = workingHtml;
+//   const { tempContainer, newElement } = createElementInDOM(innerHTML);
+//   const penpotTree = htmlToPenpot(newElement);
+//   const penpotCreateMessage: TMessage_CreateComponent = {
+//     message: "create_component",
+//     componentTree: mockTree,
+//   };
+//   parent.postMessage(penpotCreateMessage, "*");
+//   console.log(JSON.stringify(penpotTree));
+//   // document.body.removeChild(tempContainer);
+// }
 // function createPenpotTree(innerHTML: string) {
 //   const newElement = document.querySelector("body");
 //   if (!newElement) return console.log("Failed to get new element");
@@ -128,16 +113,16 @@ function createPenpotTree() {
 //   document.body.removeChild(tempContainer);
 // }
 
-function createElementInDOM(innerHTML: string) {
-  const tempContainer = document.createElement("div");
-  tempContainer.style.position = "absolute";
-  tempContainer.style.visibility = "hidden";
-  document.body.appendChild(tempContainer);
-  const newElement = document.createElement("div");
-  newElement.innerHTML = innerHTML;
-  tempContainer.appendChild(newElement);
-  return { tempContainer, newElement };
-}
+// function createElementInDOM(innerHTML: string) {
+//   const tempContainer = document.createElement("div");
+//   tempContainer.style.position = "absolute";
+//   tempContainer.style.visibility = "hidden";
+//   document.body.appendChild(tempContainer);
+//   const newElement = document.createElement("div");
+//   newElement.innerHTML = innerHTML;
+//   tempContainer.appendChild(newElement);
+//   return { tempContainer, newElement };
+// }
 function PluginComponent() {
   const url = new URL(window.location.href);
   const initialTheme = url.searchParams.get("theme");
@@ -174,9 +159,8 @@ function PluginComponent() {
       setReplyError("User details not available yet");
       return;
     }
-    //FIXME: Intent implementation below
-    // const intent = await handleInitialPrompt(prompt, user);
-    const intent = "create";
+    const intent = await handleInitialPrompt(prompt, user);
+    // const intent = "create";
     switch (intent) {
       case "undefined": {
         setReplyLoading(false);

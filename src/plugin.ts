@@ -110,8 +110,8 @@ type TMessage_IDRequest = {
 };
 //
 penpot.ui.open("Activity Tracker", `?theme=${penpot.theme},`, {
-  width: 400,
-  height: 445,
+  width: 430,
+  height: 465,
 });
 //
 penpot.ui.onMessage<TMessage_IDRequest | TMessage_CreateComponent>(
@@ -233,7 +233,7 @@ function createTree(root: PenpotNode, parent?: Board) {
         console.log(root.textAlignHorizontal);
         switch (root.textAlignHorizontal) {
           case "LEFT":
-            text.align = "LEFT";
+            text.align = "left";
             break;
           case "CENTER":
             console.log("case 'center':");
