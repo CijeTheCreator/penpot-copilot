@@ -16,7 +16,7 @@ Follow these steps to set up and run the frontend for Penpot Copilot:
 2. **Clone the Repository**  
    - Clone this repository to your local machine using:  
      ```bash  
-     git clone <repository-url>  
+     git clone https://github.com/CijeTheCreator/penpot-copilot
      ```  
 
 3. **Set Up the REST API**  
